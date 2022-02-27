@@ -38,7 +38,7 @@
           <div class="form-flex-col-label-name">{{ 'redpackets.message' | translate }}</div>
         </div>
         <div class="form-flex-col-input">
-          <ion-textarea [(ngModel)]="message" [placeholder]="'redpackets.packet-message-placeholder' | translate"
+          <ion-textarea maxlength=150 [(ngModel)]="message" [placeholder]="'redpackets.packet-message-placeholder' | translate"
             type="text"></ion-textarea>
         </div>
       </div>
@@ -71,7 +71,7 @@
         <div class="select-essentials" (click)="pickToken()">
           <div class="select-essentials-value">
             <div class="select-essentials-value-main">{{tokenSubwallet.getDisplayTokenName()}}</div>
-            <div class="select-essentials-value-sub">{{tokenSubwallet.networkWallet.network.name}}</div>
+            <div class="select-essentials-value-sub">{{tokenSubwallet.networkWallet.network.name}} - Balance: {{tokenSubwallet.getBalance().toFixed(2)}}</div>
           </div>
           <div class="select-essentials-icon">
             <img src="assets/redpackets/images/select_icon.svg" alt="Select icon">
@@ -104,12 +104,15 @@
           </div>
         </div>
         <div class="form-flex-row-input">
-          <ion-input [(ngModel)]="tokenAmount" type="number" placeholder="10" required>
+          <ion-input [(ngModel)]="tokenAmount" type="number" placeholder="10" (ngModelChange)='onChangeAmount(tokenAmount)' required>
             <span class="after-input">{{ tokenSubwallet.getDisplayTokenName() }}</span>
           </ion-input>
         </div>
         <div class="form-flex-row-hint form-hint">
           {{ 'redpackets.amount-hint' | translate }}
+        </div>
+        <div class="form-flex-row-hint form-hint red" *ngIf="!this.isBalanceEnough">
+          {{ 'redpackets.not-enough-balance' | translate }}
         </div>
       </ion-row>
 

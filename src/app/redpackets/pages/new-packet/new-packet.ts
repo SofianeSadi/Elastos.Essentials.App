@@ -55,6 +55,7 @@ export class NewPacketPage {
   public creatingPacket = false;
   private createdPacket: Packet = null;
   public unsupportedNetwork = false;
+  public isBalanceEnough = true;
 
   // UI
   public slideOpts = {
@@ -166,6 +167,11 @@ export class NewPacketPage {
 
     if (this.message.length === 0) {
       void this.formErr(this.translate.instant("redpackets.error-no-message"));
+      return false;
+    }
+
+    if (this.message.length > 150) {
+      void this.formErr(this.translate.instant("redpackets.error-message-too-long"));
       return false;
     }
 
@@ -286,5 +292,13 @@ export class NewPacketPage {
 
   useTheme(theme: RedPacketTheme) {
     this.packetTheme = theme;
+  }
+
+  onChangeAmount(amount): void {
+    console.log(this.tokenSubwallet.getBalance())
+    console.log(amount)
+    if (amount > this.tokenSubwallet.getBalance()) {
+      this.isBalanceEnough = false;
+    }
   }
 }
